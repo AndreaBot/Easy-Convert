@@ -19,8 +19,15 @@ struct ContentView: View {
     @State private var unitTag = 0
     @State private var startUnit = "-"
     @State private var targetUnit = "-"
-    @State private var convertedValue = 0.0
     @FocusState private var valueIsFocused: Bool
+    
+    private var convertedValue : Double {
+        if unitTag == 2 {
+            return UnitConversions.convertTemperature(value: valueToConvert, startUnit: startUnit, targetUnit: targetUnit)
+        } else {
+            return UnitConversions.convert(value: valueToConvert, startUnit: startUnit, targetUnit: targetUnit)
+        }
+    }
     
     var body: some View {
         NavigationStack {
@@ -35,6 +42,7 @@ struct ContentView: View {
                     .onChange(of: unitTag) {
                         startUnit = "-"
                         targetUnit = "-"
+                        valueToConvert = 0
                     }
                 }
                 
@@ -51,6 +59,14 @@ struct ContentView: View {
                     }
                 }
                 
+                Button("", systemImage: "arrow.left.arrow.right") {
+                    let first = startUnit
+                    let second = targetUnit
+                    startUnit = second
+                    targetUnit = first
+                }
+                .frame(maxWidth: .infinity)
+                
                 Section {
                     HStack {
                         TextField("Amount to convert", value: $valueToConvert, format: .number)
@@ -60,18 +76,6 @@ struct ContentView: View {
                     }
                 } header: {
                     Text("Enter value to convert")
-                }
-                
-                HStack {
-                    Spacer()
-                    Button("Convert") {
-                        if unitTag == 2 {
-                            convertedValue = UnitConversions.convertTemperature(value: valueToConvert, startUnit: startUnit, targetUnit: targetUnit)
-                        } else {
-                            convertedValue = UnitConversions.convert(value: valueToConvert, startUnit: startUnit, targetUnit: targetUnit)
-                        }
-                    }
-                    Spacer()
                 }
                 
                 Section {
