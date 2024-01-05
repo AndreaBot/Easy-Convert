@@ -47,25 +47,30 @@ struct ContentView: View {
                 }
                 
                 HStack {
-                    Picker("From", selection: $startUnit) {
-                        ForEach(units[unitTag], id: \.self) {
-                            Text($0).tag($0)
-                        }
+                    Button("", systemImage: "arrow.up.arrow.down") {
+                        let first = startUnit
+                        let second = targetUnit
+                        startUnit = second
+                        targetUnit = first
                     }
-                    Picker("To", selection: $targetUnit) {
-                        ForEach(units[unitTag], id: \.self) {
-                            Text($0).tag($0)
+                    .frame(maxWidth: 40)
+                    .buttonStyle(PlainButtonStyle())
+                    
+                    VStack {
+                        
+                        Picker("From", selection: $startUnit) {
+                            ForEach(units[unitTag], id: \.self) {
+                                Text($0).tag($0)
+                            }
+                        } 
+                       
+                        Picker("To", selection: $targetUnit) {
+                            ForEach(units[unitTag], id: \.self) {
+                                Text($0).tag($0)
+                            }
                         }
                     }
                 }
-                
-                Button("", systemImage: "arrow.left.arrow.right") {
-                    let first = startUnit
-                    let second = targetUnit
-                    startUnit = second
-                    targetUnit = first
-                }
-                .frame(maxWidth: .infinity)
                 
                 Section {
                     HStack {
