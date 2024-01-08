@@ -31,66 +31,72 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            VStack(spacing: 0) {
-                Picker("Types", selection: $unitTag) {
-                    Text("Length").tag(0)
-                    Text("Weight").tag(1)
-                    Text("Temperature").tag(2)
-                }
-                .padding()
-                .pickerStyle(.segmented)
-                .onChange(of: unitTag) {
-                    startUnit = "-"
-                    targetUnit = "-"
-                    valueToConvert = 0
-                }
-            Form {
-                HStack {
-                    Button("", systemImage: "arrow.up.arrow.down") {
-                        let first = startUnit
-                        let second = targetUnit
-                        startUnit = second
-                        targetUnit = first
-                    }
-                    .frame(maxWidth: 40)
-                    .buttonStyle(PlainButtonStyle())
+            ZStack {
+                Color(red: 0, green: 0.3, blue: 0.8).opacity(0.6)
+                    .ignoresSafeArea()
+                
+                VStack(spacing: 0) {
                     
-                    VStack {
-                        Picker("From", selection: $startUnit) {
-                            ForEach(units[unitTag], id: \.self) {
-                                Text($0).tag($0)
+                    Picker("Types", selection: $unitTag) {
+                        Text("Length").tag(0)
+                        Text("Weight").tag(1)
+                        Text("Temperature").tag(2)
+                    }
+                    .padding()
+                    .pickerStyle(.segmented)
+                    .onChange(of: unitTag) {
+                        startUnit = "-"
+                        targetUnit = "-"
+                        valueToConvert = 0
+                    }
+                    Form {
+                        HStack {
+                            Button("", systemImage: "arrow.up.arrow.down") {
+                                let first = startUnit
+                                let second = targetUnit
+                                startUnit = second
+                                targetUnit = first
+                            }
+                            .frame(maxWidth: 40)
+                            .buttonStyle(PlainButtonStyle())
+                            
+                            VStack {
+                                Picker("From", selection: $startUnit) {
+                                    ForEach(units[unitTag], id: \.self) {
+                                        Text($0).tag($0)
+                                    }
+                                }
+                                Picker("To", selection: $targetUnit) {
+                                    ForEach(units[unitTag], id: \.self) {
+                                        Text($0).tag($0)
+                                    }
+                                }
                             }
                         }
-                        Picker("To", selection: $targetUnit) {
-                            ForEach(units[unitTag], id: \.self) {
-                                Text($0).tag($0)
+                        
+                        Section {
+                            HStack {
+                                TextField("Amount to convert", value: $valueToConvert, format: .number)
+                                    .keyboardType(.decimalPad)
+                                    .focused($valueIsFocused)
+                                Text(UnitConversions.convertSymbols(symbol: startUnit))
                             }
+                        } header: {
+                            Text("Enter value to convert")
+                        }
+                        
+                        Section {
+                            HStack {
+                                Text(String(format: "%.3f", convertedValue))
+                                Spacer()
+                                Text(UnitConversions.convertSymbols(symbol: targetUnit))
+                            }
+                        } header: {
+                            Text("Converted value:")
                         }
                     }
-                }
-                
-                Section {
-                    HStack {
-                        TextField("Amount to convert", value: $valueToConvert, format: .number)
-                            .keyboardType(.decimalPad)
-                            .focused($valueIsFocused)
-                        Text(UnitConversions.convertSymbols(symbol: startUnit))
-                    }
-                } header: {
-                    Text("Enter value to convert")
-                }
-                
-                Section {
-                    HStack {
-                        Text(String(format: "%.3f", convertedValue))
-                        Spacer()
-                        Text(UnitConversions.convertSymbols(symbol: targetUnit))
-                    }
-                } header: {
-                    Text("Converted value:")
                 }
             }
-        }
             .navigationTitle("Easy Convert")
             .scrollDisabled(true)
             .toolbar(content: {
