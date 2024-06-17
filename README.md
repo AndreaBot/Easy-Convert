@@ -1,5 +1,6 @@
 # Easy Convert
-<img src="https://github.com/AndreaBot/Easy-Convert/assets/128467098/74f681bd-58ec-4ba9-9d5a-c12bf55982db" alt="1024" width="180">
+![180](https://github.com/AndreaBot/Easy-Convert/assets/128467098/86cb4da2-9c1a-4863-a4d7-be831391ab27)
+
 
 Easy Convert is the very first app I built myself using SwiftUI and it part of the Day 19 Challenge of the 100 Days of SwiftUI course by Paul Hudson.
 
